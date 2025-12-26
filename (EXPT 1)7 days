@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+#define DAYS 7
+#define NAME 20
+#define DESC 100
+
+typedef struct {
+    char name[NAME];
+    int date;
+    char desc[DESC];
+} Day;
+
+/* Function to create (initialize) */
+void create(Day w[]) {
+    for (int i = 0; i < DAYS; i++)
+        w[i].date = 0;
+}
+
+/* Function to read input */
+void read(Day w[]) {
+    for (int i = 0; i < DAYS; i++) {
+        printf("\nEnter day %d name: ", i + 1);
+        scanf("%19s", w[i].name);
+
+        do {
+            printf("Enter date: ");
+            scanf("%d", &w[i].date);
+        } while (w[i].date <= 0);
+
+        printf("Enter description: ");
+        scanf(" %99[^\n]", w[i].desc);
+    }
+}
+
+/* Function to display data */
+void display(Day w[]) {
+    printf("\n--- Weekly Activities ---\n");
+    for (int i = 0; i < DAYS; i++)
+        printf("Day: %s  Date: %d  Activity: %s\n",
+               w[i].name, w[i].date, w[i].desc);
+}
+
+int main() {
+    Day week[DAYS];
+
+    create(week);
+    read(week);
+    display(week);
+
+    return 0;
+}
