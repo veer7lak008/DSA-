@@ -1,51 +1,55 @@
 #include <stdio.h>
-
-#define DAYS 7
-#define NAME 20
-#define DESC 100
+#include <stdlib.h>
 
 typedef struct {
-    char name[NAME];
+    char *name;
     int date;
-    char desc[DESC];
+    char *description;
 } Day;
 
-/* Function to create (initialize) */
-void create(Day w[]) {
-    for (int i = 0; i < DAYS; i++)
-        w[i].date = 0;
-}
+void read(Day *week, int size) {
+    for (int i = 0; i < size; i++) {
+        week[i].name = (char *)malloc(20 * sizeof(char));
+        week[i].description = (char *)malloc(100 * sizeof(char));
 
-/* Function to read input */
-void read(Day w[]) {
-    for (int i = 0; i < DAYS; i++) {
-        printf("\nEnter day %d name: ", i + 1);
-        scanf("%19s", w[i].name);
+        printf("\nEnter name of day %d: ", i + 1);
+        scanf("%19s", week[i].name);
 
-        do {
-            printf("Enter date: ");
-            scanf("%d", &w[i].date);
-        } while (w[i].date <= 0);
+        while (1) {
+            printf("Enter date (positive number): ");
+            if (scanf("%d", &week[i].date) != 1 || week[i].date <= 0) {
+                printf("Invalid date! Please enter a positive number.\n");
+                while (getchar() != '\n');  // clear input buffer
+            } else {
+                break;
+            }
+        }
 
         printf("Enter description: ");
-        scanf(" %99[^\n]", w[i].desc);
+        scanf(" %[^\n]", week[i].description);
     }
 }
 
-/* Function to display data */
-void display(Day w[]) {
-    printf("\n--- Weekly Activities ---\n");
-    for (int i = 0; i < DAYS; i++)
-        printf("Day: %s  Date: %d  Activity: %s\n",
-               w[i].name, w[i].date, w[i].desc);
+void display(Day *week, int size) {
+    printf("\n--- Week's Activity Details ---\n");
+    for (int i = 0; i < size; i++) {
+        printf("Day: %s | Date: %d | Activity: %s\n",
+               week[i].name, week[i].date, week[i].description);
+    }
 }
 
 int main() {
-    Day week[DAYS];
+    int size = 7;
+    Day *week = (Day *)malloc(size * sizeof(Day));
 
-    create(week);
-    read(week);
-    display(week);
+    read(week, size);
+    display(week, size);
+
+    for (int i = 0; i < size; i++) {
+        free(week[i].name);
+        free(week[i].description);
+    }
+    free(week);
 
     return 0;
 }
