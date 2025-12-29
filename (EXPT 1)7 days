@@ -4,52 +4,34 @@
 typedef struct {
     char *name;
     int date;
-    char *description;
+    char *desc;
 } Day;
 
-void read(Day *week, int size) {
-    for (int i = 0; i < size; i++) {
-        week[i].name = (char *)malloc(20 * sizeof(char));
-        week[i].description = (char *)malloc(100 * sizeof(char));
+void read(Day *w, int n) {
+    for (int i = 0; i < n; i++) {
+        w[i].name = malloc(20);
+        w[i].desc = malloc(100);
 
-        printf("\nEnter name of day %d: ", i + 1);
-        scanf("%19s", week[i].name);
-
-        while (1) {
-            printf("Enter date (positive number): ");
-            if (scanf("%d", &week[i].date) != 1 || week[i].date <= 0) {
-                printf("Invalid date! Please enter a positive number.\n");
-                while (getchar() != '\n');  // clear input buffer
-            } else {
-                break;
-            }
-        }
-
-        printf("Enter description: ");
-        scanf(" %[^\n]", week[i].description);
+        scanf("%s %d", w[i].name, &w[i].date);
+        scanf(" %[^\n]", w[i].desc);
     }
 }
 
-void display(Day *week, int size) {
-    printf("\n--- Week's Activity Details ---\n");
-    for (int i = 0; i < size; i++) {
-        printf("Day: %s | Date: %d | Activity: %s\n",
-               week[i].name, week[i].date, week[i].description);
-    }
+void display(Day *w, int n) {
+    for (int i = 0; i < n; i++)
+        printf("%s %d %s\n", w[i].name, w[i].date, w[i].desc);
 }
 
 int main() {
-    int size = 7;
-    Day *week = (Day *)malloc(size * sizeof(Day));
+    Day *week = malloc(7 * sizeof(Day));
 
-    read(week, size);
-    display(week, size);
+    read(week, 7);
+    display(week, 7);
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < 7; i++) {
         free(week[i].name);
-        free(week[i].description);
+        free(week[i].desc);
     }
     free(week);
-
     return 0;
 }
