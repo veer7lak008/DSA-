@@ -2,39 +2,51 @@
 #include <string.h>
 
 int main() {
-    char string[100], pat[20], rep[20];
-    char temp[100];
-    char *pos;
+    char mainStr[100];      // Original string
+    char pattern[20];       // Word to be replaced
+    char replaceStr[20];    // New word
+    char result[100];       // Final modified string
+    char *foundPos;         // Pointer to pattern position
 
-    printf("Enter the main string: ");
-    fgets(string, sizeof(string), stdin);
-    string[strcspn(string, "\n")] = '\0';
+    // Read main string
+    printf("Enter main string: ");
+    fgets(mainStr, sizeof(mainStr), stdin);
+    mainStr[strcspn(mainStr, "\n")] = '\0';   // Remove newline
 
-    printf("Enter the pattern: ");
-    fgets(pat, sizeof(pat), stdin);
-    pat[strcspn(pat, "\n")] = '\0';
+    // Read pattern
+    printf("Enter pattern to replace: ");
+    fgets(pattern, sizeof(pattern), stdin);
+    pattern[strcspn(pattern, "\n")] = '\0';
 
-    printf("Enter the replace string: ");
-    fgets(rep, sizeof(rep), stdin);
-    rep[strcspn(rep, "\n")] = '\0';
+    // Read replacement string
+    printf("Enter replacement string: ");
+    fgets(replaceStr, sizeof(replaceStr), stdin);
+    replaceStr[strcspn(replaceStr, "\n")] = '\0';
 
-    pos = strstr(string, pat);
+    // Find pattern in main string
+    foundPos = strstr(mainStr, pattern);
 
-    if (pos == NULL) {
+    // If pattern not found
+    if (foundPos == NULL) {
         printf("Pattern not found\n");
         return 0;
     }
 
-    strncpy(temp, string, pos - string);
-    temp[pos - string] = '\0';
+    /* 
+       Copy characters before the pattern 
+       (from start of mainStr to foundPos)
+    */
+    strncpy(result, mainStr, foundPos - mainStr);
+    result[foundPos - mainStr] = '\0';  // End string properly
 
-    strcat(temp, rep);
+    // Add replacement string
+    strcat(result, replaceStr);
 
-    strcat(temp, pos + strlen(pat));
+    // Add remaining part after pattern
+    strcat(result, foundPos + strlen(pattern));
 
-    strcpy(string, temp);
-
-    printf("Modified string: %s\n", string);
+    // Print final string
+    printf("Modified string: %s\n", result);
 
     return 0;
 }
